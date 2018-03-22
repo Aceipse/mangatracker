@@ -1,4 +1,35 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<button (click)="getData()">Get Data</button>
+<div class="center">
+  <mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+  </mat-form-field>
+</div>
+<div>
+  <mat-table #table [dataSource]="dataSource">
+    <ng-container matColumnDef="Name">
+      <mat-header-cell *matHeaderCellDef class="clickable" (click)="sort('name')">Name</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.Name}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="Chapter">
+      <mat-header-cell *matHeaderCellDef>Chapter</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.Chapter}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="NewChapter">
+      <mat-header-cell *matHeaderCellDef class="clickable" (click)="sort('new_chapter')">NewChapter</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <mat-icon *ngIf="element.NewChapter">radio_button_checked
+        </mat-icon>
+        <mat-icon *ngIf="!element.NewChapter">radio_button_unchecked
+        </mat-icon>
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="Add">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <button mat-raised-button (click)="add(element.MangaId)" color="primary">Add</button>
+      </mat-cell>
+    </ng-container>
 
-<div *ngFor="let manga of mangas">{{manga.Name}}</div>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+</div>
