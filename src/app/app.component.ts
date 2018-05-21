@@ -27,7 +27,7 @@ export class AppComponent implements OnInit {
 
   public getData() {
     this.http
-      .get<Array<Manga>>('http://localhost:64472/api/Tracker')
+      .get<Array<Manga>>('http://api.aceipse.dk/api/Tracker')
       .subscribe(data => {
         this.dataSource = new MatTableDataSource(data);
       });
@@ -42,12 +42,33 @@ export class AppComponent implements OnInit {
 
     this.http
       .get<Array<Manga>>(
-        `http://localhost:64472/api/Tracker?sortOrder=${this.sortOrder}`
+        `http://api.aceipse.dk/api/Tracker?sortOrder=${this.sortOrder}`
       )
       .subscribe(data => {
         this.dataSource = new MatTableDataSource(data);
       });
   }
 
-  public add(mangaId: number) {}
+  public check(): void {
+    this.http
+      .post<Array<Manga>>('http://api.aceipse.dk/api/Tracker/CheckForNew', {})
+      .subscribe(data => {
+        this.dataSource = new MatTableDataSource(data);
+      });
+  }
+
+  public add(id: number) {
+    this.http
+      .post<Array<Manga>>(
+        'http://api.aceipse.dk/api/Tracker/AddOne?id=' + id,
+        {}
+      )
+      .subscribe(x => {
+        this.http
+          .get<Array<Manga>>('http://api.aceipse.dk/api/Tracker')
+          .subscribe(data => {
+            this.dataSource = new MatTableDataSource(data);
+          });
+      });
+  }
 }
